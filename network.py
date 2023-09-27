@@ -18,7 +18,7 @@ class Network(object):
         the activation of the previous layer, the weights and the biases.
         """
         for b, w in zip(self.biases, self.weights):
-            a = sigmoid(np.dot(w, a)+b)
+            a = relu(np.dot(w, a)+b)
 
         return a
 
@@ -70,7 +70,6 @@ class Network(object):
         """
         nabla_b = [np.zeros(b.shape) for b in self.biases]
         nabla_w = [np.zeros(w.shape) for w in self.weights]
-        print(x, x.shape, x[0].shape, x[0][0].shape)
         activation = x
         activations = [x]
         zs = []
@@ -78,18 +77,18 @@ class Network(object):
             # Calculate the activations of each layer given the input x
             z = np.dot(w, activation)+b
             zs.append(z)
-            activation = sigmoid(z)
+            activation = relu(z)
             activations.append(activation)
         # Calculate the error in the final layer based on the activation
         # of the final layer, the expected value y and the sigmoid function
         # of the weighted input of the final layer.
         delta = self.cost_derivative(activations[-1], y) * \
-            sigmoid_prime(zs[-1])
+            relu_prime(zs[-1])
         nabla_b[-1] = delta
         nabla_w[-1] = np.dot(delta, activations[-2].transpose())
         for layer in range(2, self.num_layers):
             z = zs[-layer]
-            sp = sigmoid_prime(z)
+            sp = relu_prime(z)
             # propagate the error (delta) to the previous layers, using the
             # error in the later layers to calculate the error in the
             # earlier ones.
@@ -107,6 +106,14 @@ class Network(object):
 
     def cost_derivative(self, output_activations, y):
         return (output_activations-y)
+
+
+def relu(z):
+    return z * (z > 0)
+
+
+def relu_prime(z):
+    return 1. * (z > 0)
 
 
 def sigmoid(z):
