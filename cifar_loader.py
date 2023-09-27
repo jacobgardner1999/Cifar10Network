@@ -44,5 +44,8 @@ def load_data():
     
     x_test = x_test.astype(x_train.dtype)
     y_test = y_test.astype(y_train.dtype)
+ 
+    train_data = [(x, y) for x, y in zip(x_train, y_train)]
+    test_data = [(x, y) for x, y in zip(x_test, y_test)]
 
-    return (x_train, y_train), (x_test, y_test)
+    return train_data, test_data
