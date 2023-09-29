@@ -7,6 +7,7 @@ from keras.layers import MaxPooling2D
 from keras.layers import Dense
 from keras.layers import Flatten
 from keras.optimizers import SGD
+import time
 
 
 def load_dataset():
@@ -57,16 +58,23 @@ def summarize_diagnostics(history):
 
 
 def run_test_harness():
+    t = time.localtime()
+    current_time = time.strftime("%H:%M:%S", t)
+    print("Start time: " + current_time)
     x_train, y_train, x_test, y_test = load_dataset()
 
-    x_train, test_x = prep_pixels(x_train, x_test)
+    x_train, x_test = prep_pixels(x_train, x_test)
 
     model = define_model()
 
     history = model.fit(x_train, y_train, epochs=100, batch_size=64,
-                        validation_data=(x_test, y_test), verbose=0)
+                        validation_data=(x_test, y_test), verbose="0")
 
-    _, acc = model.evaluate(x_test, y_test, verbose=0)
+    _, acc = model.evaluate(x_test, y_test, verbose="0")
     print('> %.3f' % (acc * 100.0))
+
+    tn = time.localtime()
+    current_time = time.strftime("%H:%M:%S", tn)
+    print("End time: " + current_time)
 
     summarize_diagnostics(history)
