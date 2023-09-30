@@ -63,7 +63,7 @@ def define_model2():
                     kernel_initializer='he_uniform'))
     model.add(Dense(10, activation='softmax'))
     # compile model
-    opt = SGD(lr=0.001, momentum=0.9)
+    opt = SGD(learning_rate=0.001, momentum=0.9)
     model.compile(optimizer=opt,
                   loss='categorical_crossentropy',
                   metrics=['accuracy'])
