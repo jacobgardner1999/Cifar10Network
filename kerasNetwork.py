@@ -42,6 +42,34 @@ def define_model():
     return model
 
 
+def define_model2():
+    model = Sequential()
+    model.add(Conv2D(32, (3, 3), activation='relu',
+                     kernel_initializer='he_uniform',
+                     padding='same', input_shape=(32, 32, 3)))
+    model.add(Conv2D(32, (3, 3), activation='relu',
+                     kernel_initializer='he_uniform',
+                     padding='same'))
+    model.add(MaxPooling2D((2, 2)))
+    model.add(Conv2D(64, (3, 3), activation='relu',
+                     kernel_initializer='he_uniform',
+                     padding='same'))
+    model.add(Conv2D(64, (3, 3), activation='relu',
+                     kernel_initializer='he_uniform',
+                     padding='same'))
+    model.add(MaxPooling2D((2, 2)))
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu',
+                    kernel_initializer='he_uniform'))
+    model.add(Dense(10, activation='softmax'))
+    # compile model
+    opt = SGD(lr=0.001, momentum=0.9)
+    model.compile(optimizer=opt,
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+    return model
+
+
 def summarize_diagnostics(history):
     pyplot.subplot(211)
     pyplot.title("Cross Entropy Loss")
@@ -65,7 +93,7 @@ def run_test_harness():
 
     x_train, x_test = prep_pixels(x_train, x_test)
 
-    model = define_model()
+    model = define_model2()
 
     history = model.fit(x_train, y_train, epochs=100, batch_size=64,
                         validation_data=(x_test, y_test), verbose="0")
